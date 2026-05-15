@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWS AI — конструктор подписи</title>
+  <meta name="description" content="Конструктор корпоративной подписи MWS AI для Gmail и Outlook">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="min-h-screen w-full bg-[#FAFAF8] text-black">
+
+  <div id="app-loading" class="min-h-screen flex items-center justify-center px-6">
+    <p class="font-body text-neutral-500">Загрузка шаблона подписи…</p>
+  </div>
+
+  <div id="app" class="hidden">
+    <header class="border-b hairline">
+      <div class="max-w-6xl mx-auto px-6 sm:px-10 py-3 flex items-center justify-between font-body">
+        <div class="flex items-center gap-3">
+          <div class="w-2 h-2 bg-black rounded-full"></div>
+          <span class="font-mono text-[11px] tracking-[0.18em] uppercase text-black">MWS AI / Signature</span>
+        </div>
+        <span class="font-mono text-[11px] tracking-[0.18em] uppercase text-neutral-500 hidden sm:block">v 1.0</span>
+      </div>
+    </header>
+
+    <section class="grid-bg border-b hairline">
+      <div class="max-w-6xl mx-auto px-6 sm:px-10 py-11 sm:py-16">
+        <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500 mb-4">Конструктор подписи</p>
+        <h1 class="font-display text-5xl sm:text-7xl leading-[0.95] tracking-tight text-black max-w-3xl">
+          Настройте свою <em class="italic font-normal">подпись</em><br>за минуту.
+        </h1>
+        <p class="font-body text-base sm:text-lg text-neutral-600 mt-4 max-w-xl leading-relaxed">
+          Заполните поля — превью строится из эталона <code class="font-mono text-sm bg-neutral-100 px-1">templates/signature.template.html</code>.
+          Скачайте HTML и вставьте в почту по инструкции ниже.
+        </p>
+      </div>
+    </section>
+
+    <section class="border-b hairline">
+      <div class="max-w-6xl mx-auto px-6 sm:px-10 py-8 sm:py-11">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-11">
+          <div>
+            <div class="flex items-baseline gap-4 mb-7">
+              <span class="font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500">01</span>
+              <h2 class="font-display text-2xl italic">Ваши данные</h2>
+            </div>
+            <div class="space-y-5">
+              <div>
+                <label for="field-name" class="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 mb-2">Имя</label>
+                <input id="field-name" type="text" class="w-full font-body text-lg bg-transparent border-b hairline pb-3 focus:border-black" style="border-bottom-width:1px">
+              </div>
+              <div>
+                <label for="field-position" class="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 mb-2">Должность</label>
+                <input id="field-position" type="text" class="w-full font-body text-lg bg-transparent border-b hairline pb-3 focus:border-black" style="border-bottom-width:1px">
+              </div>
+              <div>
+                <label for="field-phone" class="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 mb-2">Телефон</label>
+                <input id="field-phone" type="text" class="w-full font-body text-lg bg-transparent border-b hairline pb-3 focus:border-black" style="border-bottom-width:1px">
+              </div>
+              <div>
+                <label for="field-email" class="block font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500 mb-2">E-mail</label>
+                <input id="field-email" type="email" class="w-full font-body text-lg bg-transparent border-b hairline pb-3 focus:border-black" style="border-bottom-width:1px">
+              </div>
+            </div>
+            <div class="mt-7 p-4 border hairline bg-white/60">
+              <p class="font-mono text-[10px] tracking-[0.18em] uppercase text-neutral-500 mb-1.5">Фиксированные поля</p>
+              <p class="font-body text-sm text-neutral-700 leading-relaxed">
+                Центр компетенций в области ИИ · ООО «МВС ИИ» · логотип — в файле-эталоне
+                <a href="templates/signature.template.html" class="underline underline-offset-2">templates/signature.template.html</a>.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-baseline gap-4 mb-7">
+              <span class="font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500">02</span>
+              <h2 class="font-display text-2xl italic">Превью</h2>
+            </div>
+            <div class="border hairline bg-white shadow-[0_1px_0_rgba(0,0,0,0.02),0_20px_40px_-20px_rgba(0,0,0,0.08)]">
+              <div class="flex items-center gap-1.5 px-4 py-2 border-b hairline">
+                <div class="w-2.5 h-2.5 rounded-full bg-neutral-200"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-neutral-200"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-neutral-200"></div>
+                <span class="ml-3 font-mono text-[10px] tracking-[0.15em] uppercase text-neutral-400">письмо</span>
+              </div>
+              <div class="p-5 sm:p-7">
+                <p class="font-body text-sm text-neutral-400 mb-5 italic">...с уважением,</p>
+                <div id="signature-preview"></div>
+                <p class="font-mono text-[10px] tracking-[0.15em] uppercase text-neutral-400 mt-5 leading-relaxed">
+                  Превью = эталонный шаблон с вашими данными
+                </p>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <button id="btn-download" type="button" class="flex-1 inline-flex items-center justify-center gap-2.5 bg-black text-white px-6 py-3 font-body text-sm font-medium tracking-wide hover:bg-neutral-800 transition-colors">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+                Скачать HTML
+              </button>
+              <button id="btn-copy" type="button" class="sm:flex-none inline-flex items-center justify-center gap-2.5 border hairline border-black/80 px-6 py-3 font-body text-sm font-medium tracking-wide hover:bg-black hover:text-white transition-colors">
+                <svg class="btn-icon icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                <svg class="btn-icon icon-check hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+                <span id="btn-copy-label">Копировать код</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="max-w-6xl mx-auto px-6 sm:px-10 py-11 sm:py-14">
+        <div class="flex items-baseline gap-4 mb-8">
+          <span class="font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500">03</span>
+          <h2 class="font-display text-3xl sm:text-4xl italic">Как установить</h2>
+        </div>
+        <div id="instructions-list" class="border-t hairline"></div>
+        <div class="mt-8 p-4 sm:p-5 border hairline bg-white">
+          <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500">Примечание</span>
+          <p class="font-body text-sm text-neutral-700 leading-relaxed max-w-2xl mt-2">
+            <span class="font-display italic">Про логотип:</span> SVG может не отображаться в Gmail и старом Outlook для Windows.
+            Замените URL в эталоне <code class="font-mono text-[12px] bg-neutral-100 px-1.5 py-0.5">&lt;img src="..."&gt;</code> на PNG при необходимости.
+            Готовый пример без конструктора: <a href="examples/signature.html" class="underline underline-offset-2">examples/signature.html</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="border-t hairline">
+      <div class="max-w-6xl mx-auto px-6 sm:px-10 py-4 flex items-center justify-between font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-400">
+        <span>MWS AI</span>
+        <span>Корпоративная подпись · 2025</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Резервные копии эталона (если fetch недоступен, напр. file://) -->
+  <script type="text/plain" id="tpl-body"><meta charset="UTF-8">
+
+<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+  <tr>
+    <td style="padding:0; font-family: Arial, Helvetica, sans-serif; line-height:1.4; color:#000000;">
+
+      <!-- Имя -->
+      <p style="margin:0; font-size:15px; font-weight:bold; color:#000000;">
+        {{NAME}}
+      </p>
+
+      <!-- Должность (серым) -->
+      <p style="margin:0 0 14px 0; font-size:13px; color:#7f7f7f;">
+        {{POSITION}}
+      </p>
+
+      <!-- Подразделение / компания / контакты -->
+      <p style="margin:0; font-size:13px; color:#000000;">
+        Центр компетенций в области<br>искусственного интеллекта
+      </p>
+      <p style="margin:0; font-size:13px; color:#000000;">
+        ООО «МВС ИИ»
+      </p>
+      <p style="margin:0; font-size:13px; color:#000000;">
+        {{PHONE}}
+      </p>
+      <p style="margin:0 0 14px 0; font-size:13px;">
+        <a href="mailto:{{EMAIL}}" style="color:#000000; text-decoration:none;">{{EMAIL}}</a>
+      </p>
+
+      <!-- Логотип -->
+      <p style="margin:0;">
+        <img src="https://mts.ai/wp-content/uploads/white-mws.svg"
+             width="80" height="45" alt="MWS AI"
+             style="display:block; border:0; outline:none; text-decoration:none;">
+      </p>
+
+    </td>
+  </tr>
+</table></script>
+
+  <script type="text/plain" id="tpl-instructions"><!-- =====================================================================
+     ИНСТРУКЦИЯ ПО ВСТАВКЕ
+     =====================================================================
+
+     GMAIL (веб):
+     1. Откройте этот HTML-файл в браузере (двойной клик).
+     2. Выделите всю подпись мышкой (Ctrl+A внутри страницы) и Ctrl+C.
+     3. В Gmail → Настройки (шестерёнка) → «Все настройки» → вкладка
+        «Общие» → раздел «Подпись» → «Создать новую».
+     4. Вставьте (Ctrl+V) в поле подписи. Сохраните изменения внизу страницы.
+
+     OUTLOOK (новый Windows / Outlook на Mac / web):
+     1. Откройте HTML-файл в браузере, выделите и скопируйте подпись.
+     2. Файл → Параметры → Почта → Подписи → Создать.
+     3. Вставьте в поле, сохраните.
+
+     OUTLOOK (классический Windows):
+     1. Откройте Outlook → Файл → Параметры → Почта → Подписи → Создать.
+     2. Дайте имя подписи, оставьте окно открытым.
+     3. Найдите папку подписей (в проводнике):
+        %APPDATA%\Microsoft\Signatures
+        Там будет файл с именем вашей подписи и расширением .htm
+     4. Откройте этот файл в Блокноте, замените содержимое <body> на код
+        выше (от <table> до </table>). Сохраните.
+     5. В Outlook закройте и снова откройте окно подписей — она появится.
+
+     ВАЖНО про логотип:
+     SVG-формат блокируется в Gmail и не работает в Outlook для Windows.
+     Если логотип не отображается — захостите PNG-версию на CDN/корпоративном
+     сервере и замените URL в теге <img src="..."> на ссылку на PNG.
+     ===================================================================== --></script>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
